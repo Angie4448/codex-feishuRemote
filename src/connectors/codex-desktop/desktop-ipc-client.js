@@ -3,6 +3,7 @@
 import net from 'node:net';
 import { randomUUID } from 'node:crypto';
 import { EventEmitter } from 'node:events';
+import { resolveDesktopIpcEndpoint, validateDesktopIpcEndpoint } from './desktop-ipc-endpoint.js';
 
 const VERSIONS = new Map([
   ['initialize', 0], ['thread-owner-discovery', 1],
@@ -11,13 +12,17 @@ const VERSIONS = new Map([
 ]);
 const MAX_FRAME = 256 * 1024 * 1024;
 export class DesktopIpcClient extends EventEmitter {
-  constructor({ endpoint = '\\\\.\\pipe\\codex-ipc', timeoutMs = 12000, connect = net.createConnection } = {}) {
-    super(); this.endpoint = endpoint; this.timeoutMs = timeoutMs; this.connectSocket = connect;
+  constructor({ endpoint, platform = process.platform, env = process.env, home,
+    uid = process.getuid?.(), lstat, timeoutMs = 12000, connect = net.createConnection } = {}) {
+    super(); this.endpoint = resolveDesktopIpcEndpoint({ endpoint, platform, env, home });
+    this.endpointValidation = { platform, uid, ...(lstat ? { lstat } : {}) };
+    this.timeoutMs = timeoutMs; this.connectSocket = connect;
     this.clientId = 'initializing-client'; this.pending = new Map(); this.socket = null;
     this.buffer = Buffer.alloc(0); this.closed = false;
   }
   async connect() {
     if (this.socket) throw new Error('IPC client already connected');
+    validateDesktopIpcEndpoint(this.endpoint, this.endpointValidation);
     const socket = this.socket = this.connectSocket(this.endpoint);
     socket.on('data', chunk => this.read(chunk));
     socket.on('error', error => this.fail(error));

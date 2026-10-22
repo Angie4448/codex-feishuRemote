@@ -1,7 +1,8 @@
 import { randomUUID } from 'node:crypto';
-import { basename } from 'node:path';
+import { basename, posix, win32 } from 'node:path';
 import { EventEmitter } from 'node:events';
 import { DesktopIpcClient } from './desktop-ipc-client.js';
+import { resolveDesktopIpcEndpoint } from './desktop-ipc-endpoint.js';
 
 const ACTIVE = new Set(['inProgress', 'running', 'active']);
 const UNSAFE_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
@@ -54,8 +55,12 @@ function textContent(item) {
 // All execution and approvals remain in the desktop owner process.
 export class DesktopIpcConnector {
   constructor({ threadId = process.env.COMOTE_CODEX_DESKTOP_IPC_THREAD_ID, expectedCwd = null,
-    ipcFactory = () => new DesktopIpcClient(), snapshotTimeoutMs = 15000, reconnectMs = 5000 } = {}) {
-    this.threadId = threadId; this.expectedCwd = expectedCwd; this.ipcFactory = ipcFactory; this.snapshotTimeoutMs = snapshotTimeoutMs; this.reconnectMs = reconnectMs;
+    endpoint, platform = process.platform, env = process.env, home,
+    ipcFactory = null, snapshotTimeoutMs = 15000, reconnectMs = 5000 } = {}) {
+    this.threadId = threadId; this.expectedCwd = expectedCwd; this.platform = platform;
+    this.endpoint = resolveDesktopIpcEndpoint({ endpoint, platform, env, home });
+    this.ipcFactory = ipcFactory ?? (() => new DesktopIpcClient({ endpoint: this.endpoint, platform }));
+    this.snapshotTimeoutMs = snapshotTimeoutMs; this.reconnectMs = reconnectMs;
     this.state = 'not_connected'; this.lastError = null; this.onEvent = null;
     this.ipc = null; this.ownerId = null; this.snapshot = null; this.revision = null;
     this.signals = new EventEmitter(); this.turnSeen = new Map(); this.itemSeen = new Map(); this.requestSeen = new Set();
@@ -66,7 +71,7 @@ export class DesktopIpcConnector {
   emit(event) { try { this.onEvent?.(event); } catch {} }
   assertThread(id) { if (!this.threadId || id !== this.threadId) throw new Error('此本地同步连接只绑定当前电脑会话，请在电脑上切换绑定。'); }
   getStatus() { return { name: 'Codex Desktop IPC (experimental)', role: 'primary', state: this.state,
-    protocol: 'desktop-ipc-experimental', endpoint: '\\\\.\\pipe\\codex-ipc', threadId: this.threadId,
+    protocol: 'desktop-ipc-experimental', endpoint: this.ipc?.endpoint ?? this.endpoint, threadId: this.threadId,
     lastError: this.lastError, command: null, queuedMessages: this.queue.length,
     sending: this.sending, awaitingTurnId: this.awaitingTurnId, handoffPaused: this.handoffPaused }; }
   setHandoffPaused({ threadId, paused }) {
@@ -142,7 +147,12 @@ export class DesktopIpcConnector {
       const change = event.params.change;
       if (change.type === 'snapshot') {
         if (change.conversationState?.id !== this.threadId) throw new Error('会话快照标识不匹配');
-        if (this.expectedCwd && String(change.conversationState.cwd).replaceAll('\\', '/').toLowerCase() !== this.expectedCwd.replaceAll('\\', '/').toLowerCase()) throw new Error('电脑会话工作目录与预期不符，连接已停止。');
+        if (this.expectedCwd) {
+          const normalize = this.platform === 'win32'
+            ? value => win32.normalize(String(value)).toLowerCase()
+            : value => posix.normalize(String(value));
+          if (normalize(change.conversationState.cwd) !== normalize(this.expectedCwd)) throw new Error('电脑会话工作目录与预期不符，连接已停止。');
+        }
         if (this.revision != null && change.revision < this.revision) return;
         this.snapshot = change.conversationState; this.revision = change.revision;
         this.processState(); this.signals.emit('snapshot');

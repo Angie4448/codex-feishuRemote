@@ -16,6 +16,7 @@ const patterns = [
   ['api-key', /\b(?:AKIA[0-9A-Z]{16}|sk-(?:proj-)?[A-Za-z0-9_-]{30,})\b/],
   ['platform-identity', /\b(?:o[cu]_[a-f0-9]{20,}|cli_[a-f0-9]{12,})\b/i],
   ['personal-home-path', /[A-Z]:[\\/]+Users[\\/]+(?!example(?:[\\/]|$)|Public(?:[\\/]|$)|<)[^\\/\s"'<>]+/i],
+  ['mac-personal-home-path', /\/Users\/(?!example(?:\/|[\s"']|$)|Shared(?:\/|[\s"']|$)|<)[^/\s"'<>]+/],
   ['jwt', /\beyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\b/],
   ['literal-credential', /(?:appSecret|app_secret|client_secret|apiKey|api_key|access_token|botToken|password)\s*[=:]\s*["'][A-Za-z0-9_+\/-]{24,}["']/i],
 ];

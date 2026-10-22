@@ -1,8 +1,10 @@
 # Codex ↔ 飞书同会话同步
 
-基于 [GavinYangAI/Comote](https://github.com/GavinYangAI/Comote) **0.7.2** 的 Windows 定制版：在手机飞书私聊机器人，继续电脑 Codex 桌面端中已经打开的同一个本地会话。
+基于 [GavinYangAI/Comote](https://github.com/GavinYangAI/Comote) **0.7.2** 的 Windows / macOS 定制版：在手机飞书私聊机器人，继续电脑 Codex 桌面端中已经打开的同一个本地会话。
 
-这是独立衍生项目，保留上游 MIT 许可证及作者署名；不是 OpenAI 或飞书官方产品。首版覆盖 Windows + 飞书。仓库中的其他 IM 渠道和部分界面来自上游，尚未在此定制版中逐项验证。
+这是独立衍生项目，保留上游 MIT 许可证及作者署名；不是 OpenAI 或飞书官方产品。提供 Windows 和 macOS 的飞书同步入口。仓库中的其他 IM 渠道和部分界面来自上游，尚未在此定制版中逐项验证。
+
+Mac 用户请先看 [macOS 安装指南](docs/macos.md)，Windows 用户可直接按下文操作。仓库保持私有时，朋友需要仓库读取权限或仓库所有者提供的源码 ZIP。
 
 ## 工作方式
 
@@ -19,14 +21,14 @@
 
 ## 安装前提
 
-1. Windows、Node.js 22 或更新版本、PowerShell。
+1. Node.js 22 或更新版本；Windows 使用 PowerShell，macOS 使用终端和 Bash。
 2. 已登录的 Codex 桌面应用，以及一个已经打开的本地会话。
 3. 该会话的真实 `threadId`（UUID，可从本机 Codex 会话元数据取得；不是公开分享链接）。
 4. 可使用的飞书账号和机器人权限。配置采用上游的扫码绑定流程。
 
-本连接器使用非公开、实验性的桌面 IPC **v11**。原部署在桌面版本 **26.1013.4894** 上验证；更新桌面应用后可能需要适配。不支持把任意 ChatGPT 网页聊天 ID 当作本地会话 ID。
+本连接器使用非公开、实验性的桌面 IPC **v11**。原 Windows 部署在桌面版本 **26.1013.4894** 上验证；macOS 连接使用本用户的 Unix socket，具体桌面版本兼容性仍须在目标 Mac 验收。更新桌面应用后可能需要适配。不支持把任意 ChatGPT 网页聊天 ID 当作本地会话 ID，也不连接只有终端 CLI 的独立会话。
 
-## 安装与启动
+## Windows 安装与启动
 
 ```powershell
 git clone https://github.com/Angie4448/codex-feishuRemote.git
@@ -66,6 +68,25 @@ npm test
 
 使用自定义数据目录时，对启动、停止、打开管理页传入同一个 `-DataDirectory`。脚本参数可用 `Get-Help .\Start-Sync.ps1 -Full` 查看。这里只提供手动启动脚本，不安装开机任务，也不会启动、关闭或修改你的桌面应用和网络软件。
 
+## macOS 快速开始
+
+在终端克隆仓库（或解压源码 ZIP）并进入目录，先在 Codex 桌面打开目标会话，再运行：
+
+```bash
+npm ci --ignore-scripts
+bash ./start-macos.sh --thread-id '<你的本地会话UUID>'
+bash ./open-settings-macos.sh
+```
+
+飞书扫码绑定、确认发送者、`/use <同一个UUID>` 和普通消息测试步骤与上文相同。查看状态和停止：
+
+```bash
+bash ./status-macos.sh
+bash ./stop-macos.sh
+```
+
+默认数据目录为 `~/Library/Application Support/codex-feishuRemote`。无需 `sudo`，不安装开机项；Mac 需保持登录、联网且没有睡眠。自定义数据目录、端口、socket、日志位置和诊断见 [macOS 安装指南](docs/macos.md)。
+
 ## 更换会话与故障处理
 
 - 更换会话：等待当前任务、手机队列和审批处理完毕；停止同步服务；在桌面打开新会话；使用新的 `-ThreadId` 启动；在飞书再次执行 `/use <新UUID>`。旧聊天保留。
@@ -78,7 +99,7 @@ npm test
 
 这是从运行代码提取的全新仓库，没有携带原工作区的历史记录、私人运行状态、真实机器人凭据、个人路径、真实会话 ID、教学材料或其他应用的脚本。
 
-本机状态可能包含聊天记录和授权信息；不是加密保险库。请仅在自己的可信 Windows 账号运行，保持管理服务绑定 `127.0.0.1`。不要把数据目录提交到 Git。
+本机状态可能包含聊天记录和授权信息；不是加密保险库。请仅在自己的可信电脑账号下运行，保持管理服务绑定 `127.0.0.1`。不要把数据目录提交到 Git。
 
 提交前可运行：
 
@@ -95,9 +116,11 @@ npm run check:privacy
 - `src/server/`、`src/core/`：本机 API、身份授权、会话路由与消息投递。
 - `src/channels/feishu/`：飞书收发和格式化；`public/`：本机管理界面。
 - `tests/`：合成会话和模拟 IPC/飞书驱动测试，不发送真实消息。
-- PowerShell 脚本：独立运行目录、启动停止和本机管理页授权。
+- PowerShell / macOS 脚本：独立运行目录、启动停止和本机管理页授权。
 
-本仓库移除了所分发文件中不可用的 Tauri 打包命令及上下文监测集成，关闭上游更新轮询和下载指引；`update` 命令仅说明如何手动更新。直接无配置运行 `node bin/comote.js` 会被拒绝，请使用 `Start-Sync.ps1`；旧版通用 CLI 子命令不在此发布版入口开放，避免误读其他 Comote 配置。
+本仓库移除了所分发文件中不可用的 Tauri 打包命令及上下文监测集成，关闭上游更新轮询和下载指引；`update` 命令仅说明如何手动更新。直接无配置运行 `node bin/comote.js` 会被拒绝，请使用 `Start-Sync.ps1` 或 `start-macos.sh`；旧版通用 CLI 子命令不在此发布版入口开放，避免误读其他 Comote 配置。
+
+仓库提供 [macOS compatibility check 工作流模板](docs/ci/macos-check.yml)，包含模拟桌面 Unix socket 的生命周期检查及中文路径验证。模板尚未启用：当前发布授权没有 GitHub `workflow` 权限，因此没有完成 GitHub macOS 实测。维护者可在具备该权限后，将模板放入 `.github/workflows/macos-check.yml` 并手动运行；它不连接真实 Codex 账号或飞书机器人，也不创建周期任务。目标 Mac 上的真实双向聊天仍需按安装指南验收。
 
 `package.json` 标为 `private`，不向 npm 发布上游同名包；更新本项目请从此仓库获取代码并重新安装锁定依赖。
 

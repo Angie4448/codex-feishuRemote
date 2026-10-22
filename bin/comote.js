@@ -8,7 +8,7 @@ const argv = process.argv.slice(2);
 if (argv.length === 0 || (argv.length === 1 && ["daemon", "serve"].includes(argv[0]))) {
   await import("../src/server/index.js");
 } else if (argv.length === 1 && ["help", "--help", "-h"].includes(argv[0])) {
-  console.log("Codex desktop / Feishu same-thread sync\n\nStart:  Start-Sync.ps1\nManage: Open-Settings.ps1\nStop:   Stop-Sync.ps1\n\nAllowed commands: daemon, serve, help, --version, update [--json]\nDaemon startup requires explicit IPC, thread, state-path and token configuration.");
+  console.log("Codex desktop / Feishu same-thread sync\n\nWindows: Start-Sync.ps1 / Open-Settings.ps1 / Stop-Sync.ps1\nmacOS:   start-macos.sh / open-settings-macos.sh / stop-macos.sh\nStatus on macOS: status-macos.sh\n\nAllowed commands: daemon, serve, help, --version, update [--json]\nDaemon startup requires explicit IPC, thread, state-path and token configuration.");
 } else if (argv.length === 1 && ["version", "--version", "-v"].includes(argv[0])) {
   const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
   console.log(pkg.version);
@@ -21,6 +21,6 @@ if (argv.length === 0 || (argv.length === 1 && ["daemon", "serve"].includes(argv
   });
 } else {
   // Do not echo arbitrary arguments; they may contain credentials or paths.
-  console.error("Legacy Comote CLI commands are disabled in this build. Use Start-Sync.ps1 to start and Open-Settings.ps1 to manage desktop sync. No runtime state was read.");
+  console.error("Legacy Comote CLI commands are disabled in this build. Use Start-Sync.ps1 / start-macos.sh to start and Open-Settings.ps1 / open-settings-macos.sh to manage desktop sync. No runtime state was read.");
   process.exitCode = 2;
 }

@@ -9,6 +9,6 @@ export function assertDesktopSyncEnvironment(env = process.env) {
   if (!env.COMOTE_STATE_PATH || !isAbsolute(env.COMOTE_STATE_PATH)) missing.push("an absolute COMOTE_STATE_PATH");
   if (!String(env.COMOTE_LOCAL_API_TOKEN ?? "").trim()) missing.push("COMOTE_LOCAL_API_TOKEN");
   if (missing.length) {
-    throw new Error(`Required configuration: ${missing.join(", ")}. Use this project's Start-Sync.ps1 with a configured desktop thread.`);
+    throw new Error(`Required configuration: ${missing.join(", ")}. Use this project's Start-Sync.ps1 (Windows) or start-macos.sh (macOS) with a configured desktop thread.`);
   }
 }

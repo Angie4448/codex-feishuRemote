@@ -1,0 +1,38 @@
+name: macOS compatibility check
+
+# Opt-in verification only: no scheduled jobs and no automatic push trigger.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  macos:
+    runs-on: macos-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: './Mac 中文 checkout'
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: 'Mac 中文 checkout'
+          persist-credentials: false
+      - name: Use Node.js 22
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - name: Install locked dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Validate shell syntax
+        run: |
+          for entry in ./*-macos.sh; do
+            bash -n "$entry"
+          done
+      - name: Run unit and isolated macOS lifecycle tests
+        run: npm test
+      - name: Check publication files
+        run: npm run check:privacy

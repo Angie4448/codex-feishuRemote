@@ -1,6 +1,6 @@
 {
   "name": "codex-feishu-remote",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Angie4448/codex-feishuRemote.git"
@@ -11,7 +11,7 @@
   },
   "private": true,
   "type": "module",
-  "description": "Windows same-conversation Feishu sync for Codex Desktop, derived from Comote 0.7.2.",
+  "description": "Windows and macOS same-conversation Feishu sync for Codex Desktop, derived from Comote 0.7.2.",
   "scripts": {
     "test": "node --test",
     "check:privacy": "node scripts/check-publication.mjs"

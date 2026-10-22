@@ -12,9 +12,9 @@ const projectPath = "C:\\test-workspace\\desktop-sync";
 const identity = { channel: "feishu", stableId: "owner" };
 const conversation = { channel: "feishu", conversationId: "owner-chat", accountId: "bot" };
 
-function fixture(overrides = {}) {
+function fixture(overrides = {}, cwd = projectPath) {
   const calls = [];
-  const thread = { id: threadId, cwd: projectPath, title: "Existing desktop conversation" };
+  const thread = { id: threadId, cwd, title: "Existing desktop conversation" };
   const connector = {
     getStatus: () => ({ state: "connected" }),
     readThread: async (params) => { calls.push(["read", params]); return { thread }; },
@@ -63,6 +63,19 @@ test("/open accepts a Windows directory containing spaces", async () => {
   assert.equal(reply.kind, "text");
   assert.equal(router.currentProjectByIdentity.get("feishu:owner"), path);
   assert.deepEqual(calls, [["list", { cwd: path }]]);
+});
+
+test("macOS paths with spaces and Unicode preserve the existing thread and working directory", async () => {
+  const path = "/Users/example/My Projects/课程";
+  const { send, router, calls, sessions } = fixture({}, path);
+  await send(`/use ${threadId}`);
+  await send("Continue from the phone");
+  assert.equal(router.currentProjectByIdentity.get("feishu:owner"), path);
+  assert.equal(sessions.getActiveSession(path, "feishu:owner").id, threadId);
+  assert.deepEqual(calls.find(([name]) => name === "turn")[1], {
+    threadId, text: "Continue from the phone", cwd: path, images: [],
+  });
+  assert.equal(router.getThreadBinding(threadId).projectPath, path);
 });
 
 test("an explicit thread ID selects its own cwd without requiring or listing a project", async () => {

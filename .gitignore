@@ -41,3 +41,5 @@ tokens.json
 
 # A package manager must not publish this repository as the upstream package.
 *.tgz
+*.zip
+*.sock
