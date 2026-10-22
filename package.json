@@ -1,0 +1,31 @@
+{
+  "name": "codex-feishu-remote",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Angie4448/codex-feishuRemote.git"
+  },
+  "homepage": "https://github.com/Angie4448/codex-feishuRemote#readme",
+  "bugs": {
+    "url": "https://github.com/Angie4448/codex-feishuRemote/issues"
+  },
+  "private": true,
+  "type": "module",
+  "description": "Windows same-conversation Feishu sync for Codex Desktop, derived from Comote 0.7.2.",
+  "scripts": {
+    "test": "node --test",
+    "check:privacy": "node scripts/check-publication.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@larksuiteoapi/node-sdk": "^1.56.1",
+    "dingtalk-stream": "^2.1.6-beta.1",
+    "qrcode-generator": "^1.4.4"
+  },
+  "overrides": {
+    "axios": "1.16.1"
+  },
+  "license": "MIT"
+}

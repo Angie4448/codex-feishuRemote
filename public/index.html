@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Comote</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="app-frame">
+      <aside class="side-nav" aria-label="主导航" data-i18n-attr="aria-label:web.nav.ariaLabel">
+        <div class="side-brand">
+          <img class="brand-logo" src="/logo.svg" alt="Comote">
+          <div>
+            <h1>Comote</h1>
+            <p data-i18n="web.brand.tagline">手机上的 Codex</p>
+          </div>
+        </div>
+
+        <nav class="nav-list">
+          <div class="nav-group-label" data-i18n="web.nav.groupChannel">通道</div>
+          <a class="nav-item active" href="#connectPhone">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg>
+            <span data-i18n="web.nav.connectPhone">连接手机</span>
+          </a>
+          <a class="nav-item" href="#users">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></svg>
+            <span data-i18n="web.nav.users">授权用户</span>
+          </a>
+          <a class="nav-item" href="#phoneCommands">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10"/><path d="M2 21h20"/></svg>
+            <span data-i18n="web.nav.phoneCommands">从手机使用</span>
+          </a>
+          <a class="nav-item" href="#approvals">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>
+            <span data-i18n="web.nav.approvals">待审批</span><span id="approvalsNavCount" class="nav-count" hidden>0</span>
+          </a>
+          <div class="nav-group-label" data-i18n="web.nav.groupRecords">记录</div>
+          <a class="nav-item" href="#conversation">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span data-i18n="web.nav.conversation">对话记录</span>
+          </a>
+          <a class="nav-item" href="#logs">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h5"/></svg>
+            <span data-i18n="web.nav.logs">运行日志</span>
+          </a>
+          <a class="nav-item" href="#advanced">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span data-i18n="web.nav.advanced">高级设置</span>
+          </a>
+          <a class="nav-item" href="#about">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <span data-i18n="web.nav.about">关于</span>
+          </a>
+        </nav>
+        <div class="sidebar-foot" id="sidebarVersion" data-i18n="web.version.checking">版本 · 检查中</div>
+      </aside>
+
+      <main class="main-pane">
+        <header class="top-bar">
+          <div>
+            <h1 class="top-title" data-i18n="web.top.title">Comote 设置</h1>
+            <p class="top-subtitle" data-i18n="web.top.subtitle">把 Codex 接到你的手机上，随时随地继续你的工作。</p>
+          </div>
+          <div class="top-bar-actions">
+            <label class="lang-switch" title="Language / 语言">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 3.5 9A14 14 0 0 1 12 21a14 14 0 0 1-3.5-9A14 14 0 0 1 12 3z"/></svg>
+              <select id="langSelect" aria-label="Language"></select>
+            </label>
+            <span id="bridgeStatus" class="status-pill">启动中</span>
+          </div>
+        </header>
+
+        <section id="codexNotice" class="system-notice" hidden>
+          <div>
+            <strong data-i18n="web.codexNotice.title">无法连接 Codex</strong>
+            <p data-i18n="web.codexNotice.body">Comote 需要本机的 Codex：请安装 ChatGPT 桌面应用或 Codex CLI（npm install -g @openai/codex），然后重试。</p>
+            <p id="codexNoticeError" hidden></p>
+            <p id="codexNoticeCommand" hidden><span data-i18n="web.codexNotice.commandLabel">检测到的 codex 路径：</span><code id="codexNoticeCommandText"></code></p>
+          </div>
+          <button id="retryCodexConnection" class="secondary-button" data-default-label="重试" type="button" data-i18n="web.button.retry">重试</button>
+        </section>
+
+        <section id="loadError" class="system-notice error-notice" hidden>
+          <div>
+            <strong id="loadErrorTitle" data-i18n="web.loadError.title">加载设置时出错</strong>
+            <p id="loadErrorDetail"></p>
+          </div>
+          <button id="retryLoad" class="secondary-button" type="button" data-i18n="web.button.retry">重试</button>
+        </section>
+
+        <section id="readiness" class="section-block" hidden>
+          <div class="section-heading">
+            <h2 data-i18n="web.readiness.title">开始使用</h2>
+            <p data-i18n="web.readiness.subtitle">完成下面几步，就能从手机控制本机 Codex。</p>
+          </div>
+          <ul id="readinessList" class="readiness-list"></ul>
+        </section>
+
+        <section id="connectPhone" class="section-block">
+          <div class="section-heading inline-heading">
+            <div>
+              <h2 data-i18n="web.connect.title">连接手机</h2>
+              <p><span data-i18n="web.connect.subtitlePrefix">选择一个手机通道，绑定后即可从手机控制本机 Codex。</span><strong data-i18n="web.connect.recommendFeishu">推荐用飞书</strong><span data-i18n="web.connect.subtitleSuffix"> —— 接口稳定、支持卡片交互，体验更好。</span></p>
+            </div>
+            <button id="refreshConnect" class="secondary-button" type="button" data-i18n="web.button.refresh">刷新</button>
+          </div>
+
+          <div id="channelCards"></div>
+        </section>
+
+        <section id="users" class="section-block">
+          <div class="section-heading inline-heading">
+            <div>
+              <h2 data-i18n="web.users.title">授权用户</h2>
+              <p data-i18n="web.users.subtitle">只有在本机确认过的微信或飞书用户可以控制 Comote。</p>
+            </div>
+            <button id="refreshUsers" class="secondary-button" type="button" data-i18n="web.button.refresh">刷新</button>
+          </div>
+
+          <div class="user-grid">
+            <article class="panel">
+              <h3 data-i18n="web.users.authorized">已授权用户</h3>
+              <ul id="identities" class="list"></ul>
+            </article>
+            <article class="panel">
+              <h3 data-i18n="web.users.pending">待确认用户</h3>
+              <ul id="identityCandidates" class="list compact-list"></ul>
+            </article>
+          </div>
+        </section>
+
+        <section id="phoneCommands" class="section-block">
+          <div class="section-heading inline-heading">
+            <div>
+              <h2 data-i18n="web.commands.title">从手机使用</h2>
+              <p data-i18n="web.commands.subtitle">绑定任一通道后，在微信或飞书发送命令。</p>
+            </div>
+            <span class="badge neutral" data-i18n="web.commands.badge">微信和飞书均可用</span>
+          </div>
+
+          <div class="command-grid">
+            <code>/projects</code>
+            <code>/open 1</code>
+            <code>/sessions</code>
+            <code>/new fix tests</code>
+            <code>/approve &lt;id&gt;</code>
+            <code>/cancel</code>
+          </div>
+        </section>
+
+        <section id="approvals" class="section-block">
+          <div class="section-heading inline-heading">
+            <div>
+              <h2 data-i18n="web.approvals.title">待审批操作</h2>
+              <p data-i18n="web.approvals.subtitle">Codex 请求执行命令或修改文件时，会在这里等待你批准。</p>
+            </div>
+            <span id="approvalsBadge" class="badge neutral">0 项待处理</span>
+          </div>
+          <ul id="approvalsList" class="list"></ul>
+        </section>
+
+        <section id="conversation" class="section-block">
+          <div class="section-heading">
+            <h2 data-i18n="web.conversation.title">对话记录</h2>
+            <p data-i18n="web.conversation.subtitle">手机上与 Codex 的最近往来，daemon 重启后保留。</p>
+          </div>
+          <div id="conversationList"></div>
+        </section>
+
+        <section id="logs" class="section-block">
+          <div class="section-heading inline-heading">
+            <div>
+              <h2 data-i18n="web.logs.title">运行日志</h2>
+              <p data-i18n="web.logs.subtitle">本次运行的诊断事件。重启 daemon 后清空。</p>
+            </div>
+            <button id="refreshLogs" class="secondary-button" type="button" data-i18n="web.button.refresh">刷新</button>
+          </div>
+          <ul id="logList" class="list log-list"></ul>
+        </section>
+
+        <details id="advanced" class="advanced">
+          <summary data-i18n="web.advanced.title">高级设置</summary>
+          <section class="advanced-grid">
+            <article class="panel">
+              <h3 data-i18n="web.advanced.projects">Codex 项目</h3>
+              <div class="actions">
+                <button id="discoverProjects" type="button" data-i18n="web.button.refresh">刷新</button>
+              </div>
+              <ul id="projects" class="list"></ul>
+            </article>
+
+            <article class="panel">
+              <h3 data-i18n="web.advanced.diagnostics">诊断</h3>
+              <dl id="connections" class="kv"></dl>
+              <div class="actions">
+                <button id="connectDesktop" class="secondary-button" type="button" data-i18n="web.advanced.retryDesktop">重试连接 Codex Desktop</button>
+              </div>
+            </article>
+
+            <article id="keepAlivePanel" class="panel" hidden>
+              <h3 data-i18n="web.advanced.keepAliveTitle">后台运行</h3>
+              <label class="setting-toggle" for="keepDaemonAlive">
+                <span class="setting-copy">
+                  <strong data-i18n="web.advanced.keepAliveLabel">关闭窗口后保持后台运行</strong>
+                  <span id="keepDaemonAliveStatus" class="setting-note" data-i18n="web.advanced.keepAliveHint">开启后，退出 Comote 仍保持本地服务在线，手机可继续连接 Codex。</span>
+                </span>
+                <span class="switch-control">
+                  <input id="keepDaemonAlive" type="checkbox" role="switch" data-i18n-attr="aria-label:web.advanced.keepAliveLabel" aria-label="关闭窗口后保持后台运行">
+                  <span class="switch-track" aria-hidden="true"></span>
+                </span>
+              </label>
+            </article>
+
+            <article class="panel">
+              <h3 data-i18n="web.advanced.threads">Codex 对话</h3>
+              <div id="threadsControls" class="config-field" hidden>
+                <label class="domain-label" for="threadsProjectSelect" data-i18n="web.threads.projectLabel">项目</label>
+                <label class="select-wrap"><select id="threadsProjectSelect"></select></label>
+              </div>
+              <ul id="threads" class="list"></ul>
+              <div id="threadsFooter" class="actions" hidden>
+                <button id="threadsLoadMore" class="secondary-button load-more-btn" type="button" data-i18n="web.threads.loadMore">加载更多</button>
+              </div>
+            </article>
+
+            <article class="panel">
+              <h3 data-i18n="web.advanced.addUser">手动添加用户</h3>
+              <form id="identityForm" class="inline-form">
+                <select name="channel" aria-label="通道" data-i18n-attr="aria-label:web.advanced.channelLabel"></select>
+                <input name="stableId" placeholder="用户 ID" required data-i18n-attr="placeholder:web.advanced.userIdPlaceholder">
+                <input name="displayName" placeholder="显示名称" required data-i18n-attr="placeholder:web.advanced.displayNamePlaceholder">
+                <button type="submit" data-i18n="web.button.confirm">确认</button>
+              </form>
+            </article>
+          </section>
+        </details>
+
+        <section id="about" class="section-block">
+          <div class="section-heading">
+            <h2 data-i18n="web.about.title">关于 Comote</h2>
+            <p data-i18n="web.about.subtitle">手机上的 Codex 遥控器。本地运行，端到端私密，开源 MIT。</p>
+          </div>
+          <div class="user-grid">
+            <article class="panel">
+              <h3 data-i18n="web.about.version">版本</h3>
+              <dl id="aboutVersion" class="kv">
+                <dt data-i18n="web.about.currentVersion">当前版本</dt><dd id="aboutCurrentVersion">加载中…</dd>
+              </dl>
+              <div class="actions">
+                <a class="secondary-button" href="https://github.com/Angie4448/codex-feishuRemote" target="_blank" rel="noopener" data-i18n="web.about.repo">仓库</a>
+              </div>
+            </article>
+            <article class="panel">
+              <h3 data-i18n="web.about.project">项目</h3>
+              <dl class="kv">
+                <dt data-i18n="web.about.repo">仓库</dt><dd><a href="https://github.com/Angie4448/codex-feishuRemote" target="_blank" rel="noopener">Angie4448/codex-feishuRemote</a></dd>
+                <dt>Upstream</dt><dd><a href="https://github.com/GavinYangAI/comote" target="_blank" rel="noopener">Comote · Gavin Yang</a></dd>
+                <dt data-i18n="web.about.license">协议</dt><dd>MIT License</dd>
+                <dt data-i18n="web.about.reportBug">报 Bug</dt><dd><a href="https://github.com/Angie4448/codex-feishuRemote/issues" target="_blank" rel="noopener" data-i18n="web.about.submitIssue">提交 Issue</a></dd>
+              </dl>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/local-auth.js"></script>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+# Dependencies and editor output
+node_modules/
+coverage/
+dist/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# All local configuration and runtime data stay off GitHub.
+.env
+.env.*
+!.env.example
+*.local.json
+sync.config.json
+local-settings.json
+instance.json
+launcher.lock
+.comote/
+runtime/
+data/
+logs/
+backups/
+work/
+context-management/
+state.json
+state.json.*
+api-token.txt
+*credentials*.json
+token.json
+tokens.json
+*.log
+*.pid
+*.jsonl
+*.sqlite*
+*.db
+*.db-*
+*.pem
+*.key
+*.bak
+
+# A package manager must not publish this repository as the upstream package.
+*.tgz
